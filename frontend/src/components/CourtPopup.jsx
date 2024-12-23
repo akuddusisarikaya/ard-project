@@ -7,6 +7,7 @@ import Modal from "@mui/material/Modal";
 import UploadPopUp from "./UploadPopUp";
 import useAPI from "../store/storeAPI";
 import { DataContext } from "../store/DataContext";
+import { useNavigate } from "react-router-dom";
 
 const modalStyle = {
   position: "absolute",
@@ -21,6 +22,7 @@ const modalStyle = {
 };
 
 export default function CourtPopup({ open, handleClose, lawyerID, caseNum }) {
+  const navigate = useNavigate();
   const { updateData,data } = React.useContext(DataContext);
   const { setData } = useAPI();
   const [court, setCourt] = React.useState({
@@ -56,6 +58,7 @@ export default function CourtPopup({ open, handleClose, lawyerID, caseNum }) {
       const response = await setData("/admin/createcourt", "POST", court);
       handleCaseSave(response._id);
       handleClose();
+      navigate(0);
     } catch (error) {
       console.error(error);
     }

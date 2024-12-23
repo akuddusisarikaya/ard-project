@@ -6,6 +6,7 @@ import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import MenuItem from "@mui/material/MenuItem";
 import storeAPI from "../store/storeAPI";
+import { useNavigate } from "react-router-dom";
 
 const modalStyle = {
   position: "absolute",
@@ -20,6 +21,7 @@ const modalStyle = {
 };
 
 export default function CreateCasePopup({ open, handleClose, appID }) {
+  const navigate = useNavigate();
   const [lawyers, setLawyers] = useState([]);
   const [selectedLawyer, setSelectedLawyer] = useState("");
   const handledID = appID;
@@ -67,6 +69,7 @@ export default function CreateCasePopup({ open, handleClose, appID }) {
       const newAppBody = { case_id: response._id };
       await setData(`/admin/patchapplication/${appID}`, "PATCH", newAppBody);
       handleClose();
+      navigate(0);
     } catch (error) {
       console.error(error);
     }

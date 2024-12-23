@@ -65,9 +65,7 @@ const EditCase = () => {
       const response = await setData(`/addtocasedocs/${caseNo}`, "PATCH", {
         newDocs: newDoc,
       });
-      console.log(response);
       updateData("docs", "");
-      console.log(data);
     } catch (error) {
       console.error(error);
     }

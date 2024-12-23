@@ -45,8 +45,7 @@ const LawyerCases = () => {
     };
     fetchCases();
   }, [activate]);
-
-  console.log(cases)
+  
   return (
     <Box sx={{ p: 2, mt: 2, textAlign: "center" }}>
       <Button

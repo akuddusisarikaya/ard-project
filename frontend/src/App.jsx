@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { HashRouter as Router, Routes, Route } from "react-router-dom";
 import { DataProvider } from "./store/DataContext";
 
 import Layout from "./components/Layout";
@@ -13,7 +13,7 @@ import EditCase from "./pages/EditCase";
 import LawyerCases from "./pages/LawyerCases";
 import LoginPage from "./pages/Login";
 import AppForOther from "./pages/AppForOther";
-import Navbar from "./components/Navbar";
+//import Navbar from "./components/Navbar";
 
 function App() {
   return (

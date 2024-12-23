@@ -7,13 +7,14 @@ import {
   deleteCase,
   updateCase,
   patchCase,
-  addToCase
+  addToCase,
+  addToCaseNewDocs
 } from "../controller/case";
 
 const router = express.Router();
 
 router.post("/admin/createcase", verifyAdminToken, createCase);
-router.post("/createcasetest", createCase);
+router.post("/createcase",verifyAdminToken, createCase);
 router.get('/getallcasetest', getAllCases);
 router.get('/gettestcase/:id', getCaseByID);
 router.get("/admin/getallcases", verifyAdminToken, getAllCases);
@@ -24,6 +25,7 @@ router.put("/admin/updatecase/:id", verifyAdminToken, updateCase);
 router.put("/lawyer/updatecase/:id", verifyUserToken, updateCase);
 router.patch("/admin/patchcase/:id", verifyAdminToken, patchCase);
 router.patch("/lawyer/patchcase/:id", verifyUserToken, patchCase);
-router.patch("/addtocase/:id", addToCase);
+router.patch("/addtocase/:id",addToCase);
+router.patch("/addtocasedocs/:id",addToCaseNewDocs);
 
 export default router;

@@ -9,12 +9,14 @@ import ShowCourts from "../components/ShowCourts";
 import UploadPopUp from "../components/UploadPopUp";
 import ShowApplication from "../components/ShowApplication";
 import AccountBoxIcon from "@mui/icons-material/AccountBox";
+import { DataContext } from "../store/DataContext";
 
 const EditCase = () => {
   const user = JSON.parse(sessionStorage.getItem("user"));
   const navigate = useNavigate();
   const { caseNo } = useParams();
-  const { fetchData } = useAPI();
+  const { fetchData, setData } = useAPI();
+  const { data, updateData } = React.useContext(DataContext);
   // Modal durumları
   const [courtModalOpen, setCourtModalOpen] = useState(false);
   const [caseInfo, setCaseInfo] = React.useState({});
@@ -49,8 +51,26 @@ const EditCase = () => {
   const handleDocModal = () => {
     setDocModal(!docModal);
   };
-  const showAppForm = () => {
-    navigate(`/admin/showapp/${caseInfo.application_number}`);
+
+  const handleNewDocs = async () => {
+    var userRole = "";
+
+    if (user.role === "Admin" || user.role === "admin") {
+      userRole = "admin";
+    } else {
+      userRole = "lawyer";
+    }
+    const newDoc = JSON.parse(data.docs);
+    try {
+      const response = await setData(`/addtocasedocs/${caseNo}`, "PATCH", {
+        newDocs: newDoc,
+      });
+      console.log(response);
+      updateData("docs", "");
+      console.log(data);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   // Modal açma ve kapama fonksiyonları
@@ -58,9 +78,18 @@ const EditCase = () => {
   const handleCourtModalClose = () => setCourtModalOpen(false);
 
   React.useEffect(() => {
+    var userRole = "";
+    if (user.role === "Admin" || user.role === "admin") {
+      userRole = "admin";
+    } else {
+      userRole = "lawyer";
+    }
     const getCase = async () => {
       try {
-        const response = await fetchData(`/gettestcase/${caseNo}`, "GET");
+        const response = await fetchData(
+          `/${userRole}/getcasebyid/${caseNo}`,
+          "GET"
+        );
         setCaseInfo(response);
         if (user.role === "Admin" || user.role === "admin") {
           if (response.lawyer) {
@@ -83,8 +112,12 @@ const EditCase = () => {
     <Box className={display} sx={{}}>
       {user.role !== "Admin" && user.role !== "admin" ? (
         <>
-          <Box style={{display : "flex"}}>
-            <Button variant="contained" onClick={() => navigate(-1)} style={{ marginLeft: "-10%", marginBottom: "2%" }}>
+          <Box style={{ display: "flex" }}>
+            <Button
+              variant="contained"
+              onClick={() => navigate(-1)}
+              style={{ marginLeft: "-10%", marginBottom: "2%" }}
+            >
               Geri Dön
             </Button>
             <Button
@@ -113,7 +146,7 @@ const EditCase = () => {
             <TextField
               variant="outlined"
               disabled
-              value={caseInfo.case_number}
+              value={caseInfo?.case_number}
             />
           </div>
           <div>
@@ -121,7 +154,7 @@ const EditCase = () => {
             <TextField
               variant="outlined"
               disabled
-              value={caseInfo.case_start_date}
+              value={caseInfo?.case_start_date}
             />
           </div>
           <div>
@@ -129,7 +162,7 @@ const EditCase = () => {
             <TextField
               variant="outlined"
               disabled
-              value={caseInfo.case_end_date}
+              value={caseInfo?.case_end_date}
             />
           </div>
           <div>
@@ -137,7 +170,7 @@ const EditCase = () => {
             <TextField
               variant="outlined"
               disabled
-              value={caseInfo.case_contiue ? "Sonuçlandı" : "Devam Ediyor"}
+              value={caseInfo?.case_contiue ? "Sonuçlandı" : "Devam Ediyor"}
             />
           </div>
           <div>
@@ -205,6 +238,7 @@ const EditCase = () => {
               <ShowDocs docList={caseInfo.docs} />
               <UploadPopUp />
               <Button
+                onClick={handleNewDocs}
                 style={{ width: "20%", alignSelf: "center" }}
                 variant="contained"
                 color="primary"
@@ -241,8 +275,8 @@ const EditCase = () => {
           <CourtPopup
             open={courtModalOpen}
             handleClose={handleCourtModalClose}
-            caseNumber={caseNo}
-            lawyer={lawyerInfo._id}
+            caseNum={caseNo}
+            lawyerID={lawyerInfo._id}
           />
         </Box>
       </Modal>

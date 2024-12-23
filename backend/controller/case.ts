@@ -81,27 +81,51 @@ export const patchCase = async (req: Request, res: Response): Promise<void> => {
   }
 };
 
-
 export const addToCase = async (req: Request, res: Response): Promise<void> => {
   try {
-    const {id} = req.params;
-    const {newCourt} = req.body;
+    const { id } = req.params;
+    const { newCourt } = req.body;
 
-  if(!newCourt) {
-    res.status(400).json({message: "veri bulunamadı"});
-  }
+    if (!newCourt) {
+      res.status(400).json({ message: "veri bulunamadı" });
+    }
 
-  const updatedCase = await Case.findByIdAndUpdate(
-    id,
-    { $addToSet : {courts :newCourt}},
-    {new : true, runValidators: true}
-  )
+    const updatedCase = await Case.findByIdAndUpdate(
+      id,
+      { $addToSet: { courts: newCourt } },
+      { new: true, runValidators: true }
+    );
 
-  if(!updatedCase){
-    res.status(404).json({ message: 'Avukat bulunamadı' });
-  }
-  res.status(200).json(updatedCase);
+    if (!updatedCase) {
+      res.status(404).json({ message: "Avukat bulunamadı" });
+    }
+    res.status(200).json(updatedCase);
   } catch (error) {
-    res.status(500).json({ message: 'Internal Server Error', error });
+    res.status(500).json({ message: "Internal Server Error", error });
   }
-}
+};
+
+export const addToCaseNewDocs = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  try {
+    const {id} = req.params;
+    const {newDocs} = req.body;
+    if(!newDocs){
+      res.status(400).json({message : "veri bulunamadı"});
+    }
+    const updatedCase = await Case.findByIdAndUpdate(
+      id,
+      {$addToSet: {docs : newDocs}},
+      {new : true,runValidators : true}
+    );
+    if (!updatedCase) {
+      res.status(404).json({ message: "Dava dosyası bulunamadı" });
+    }
+    res.status(200).json(updatedCase);
+
+  } catch (error) {
+    res.status(500).json({ message: "Internal Server Error", error });
+  }
+};

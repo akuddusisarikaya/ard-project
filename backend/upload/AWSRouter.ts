@@ -7,6 +7,6 @@ const upload = multer();
 const router = express.Router();
 
 router.post('/aws/upload', upload.single('file'), uploadFileToAWS);
-router.get('/aws/geturl', getSignedFileUrl);
+router.get('/aws/geturl/:key', getSignedFileUrl);
 
 export default router

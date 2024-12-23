@@ -15,6 +15,22 @@ export default function ShowDocs({ docList }) {
   const [docs, setDocs] = React.useState([]);
   const [loading, setLoading] = React.useState(false);
 
+  const getURLfromAWS = async (doc) => {
+    const key = doc.doc_name;
+    try {
+      const response = await fetchData(`/aws/geturl/${key}`, "GET");
+      return response.signedUrl;
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  const handleLinkClick = async (document) => {
+    const url = await getURLfromAWS(document);
+    if (url) {
+      window.open(url, "_blank");
+    }
+  };
+
   React.useEffect(() => {
     const fetchDocs = async () => {
       setLoading(true);
@@ -61,10 +77,14 @@ export default function ShowDocs({ docList }) {
                   </TableCell>
                   <TableCell>
                     <a
-                      href={document.doc_url}
-                      style={{ color: "blue", textDecoration: "underline" }}
+                      onClick={() => handleLinkClick(document)}
+                      style={{
+                        color: "blue",
+                        textDecoration: "underline",
+                        cursor: "pointer",
+                      }}
                     >
-                      {document?.doc_url || ""}
+                      Dosyayı Görüntüle
                     </a>
                   </TableCell>
                   <TableCell>{document?.describe || ""}</TableCell>

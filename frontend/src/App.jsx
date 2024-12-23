@@ -13,6 +13,7 @@ import EditCase from "./pages/EditCase";
 import LawyerCases from "./pages/LawyerCases";
 import LoginPage from "./pages/Login";
 import AppForOther from "./pages/AppForOther";
+import EditLawyer from "./pages/EditLawyer";
 //import Navbar from "./components/Navbar";
 
 function App() {
@@ -36,6 +37,7 @@ function App() {
             <Route path="list-archive" element={<ListArchive />} />
             <Route path="edit-application/:id" element={<EditApplication />} />
             <Route path="edit-case/:caseNo" element={<EditCase />} />
+            <Route path="edit-lawyer/:lawyerId" element={<EditLawyer />} />
           </Route>
 
           {/* Lawyer Rotası */}

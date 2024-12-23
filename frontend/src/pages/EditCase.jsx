@@ -24,13 +24,13 @@ const EditCase = () => {
   const [appModal, setAppModal] = React.useState(false);
   const [display, setDisplay] = React.useState("");
 
-  useEffect(()=> {
-    if(user.role === "Admin" || user.role === "admin"){
+  useEffect(() => {
+    if (user.role === "Admin" || user.role === "admin") {
       setDisplay("");
-    }else {
-      setDisplay("lawyerDisplay")
+    } else {
+      setDisplay("lawyerDisplay");
     }
-  })
+  });
 
   const handleLogout = () => {
     sessionStorage.removeItem("token");
@@ -62,7 +62,7 @@ const EditCase = () => {
       try {
         const response = await fetchData(`/gettestcase/${caseNo}`, "GET");
         setCaseInfo(response);
-        if(user.role === "Admin" || user.role === "admin"){
+        if (user.role === "Admin" || user.role === "admin") {
           if (response.lawyer) {
             const lawRes = await fetchData(
               `/getuserbyid/${response.lawyer}`,
@@ -79,27 +79,28 @@ const EditCase = () => {
     getCase();
   }, []);
 
-
   return (
-    <Box className = {display} sx={{}}>
-      {
-        user.role !== "Admin" || user.role !== "admin" ? (
-          <>
-          <Button onClick={ () => navigate(-1)}>
-            Geri Dön
-          </Button>
-          <Button
-        style={{ marginBottom: "2%", marginLeft: "80%" }}
-        color="secondary"
-        variant="contained"
-        onClick={handleLogout}
-      >
-        <AccountBoxIcon /> Çıkış Yap
-      </Button></>
-        ): 
-        (<></>)
-      }
-      <Box  >
+    <Box className={display} sx={{}}>
+      {user.role !== "Admin" && user.role !== "admin" ? (
+        <>
+          <Box style={{display : "flex"}}>
+            <Button variant="contained" onClick={() => navigate(-1)} style={{ marginLeft: "-10%", marginBottom: "2%" }}>
+              Geri Dön
+            </Button>
+            <Button
+              style={{ marginBottom: "2%", marginLeft: "80%" }}
+              color="secondary"
+              variant="contained"
+              onClick={handleLogout}
+            >
+              <AccountBoxIcon /> Çıkış Yap
+            </Button>
+          </Box>
+        </>
+      ) : (
+        <></>
+      )}
+      <Box>
         <div
           style={{
             marginLeft: "-20%",

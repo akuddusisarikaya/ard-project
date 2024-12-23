@@ -43,7 +43,7 @@ export default function ListLawyer() {
 
   // Lawyer düzenleme
   const handleEdit = (id) => {
-    alert(`Edit lawyer with ID: ${id}`);
+    navigate(`/admin/edit-lawyer/${id}`);
   };
 
   // Lawyer silme

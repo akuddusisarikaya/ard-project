@@ -38,7 +38,7 @@ export default function ListingApps({applications, loading}){
         <Fab
           color="primary"
           aria-label="add"
-          onClick={() => navigate("/app")} // Yeni başvuru oluşturma sayfasına yönlendirme
+          onClick={() => navigate("/admin/app")} // Yeni başvuru oluşturma sayfasına yönlendirme
         >
           <AddIcon />
         </Fab>

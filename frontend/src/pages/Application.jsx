@@ -173,7 +173,7 @@ export default function Application() {
         return error;
       }
       alert("Başvuru oluşturuldu");
-      //navigate(0);
+      navigate(0);
     } catch (error) {
       return error;
     }finally{

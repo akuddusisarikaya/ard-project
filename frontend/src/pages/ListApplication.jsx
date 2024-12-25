@@ -25,7 +25,7 @@ export default function ListApplication() {
       clearTimeout(timeoutRef.current);
       setLoading(false);
     }
-  };f
+  };
   React.useState(() => {
     timeoutRef.current = setTimeout(() => {
       window.location.reload(); // 10 saniye sonunda sayfayı yenile

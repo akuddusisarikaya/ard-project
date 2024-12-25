@@ -15,7 +15,7 @@ import {
 import AddIcon from "@mui/icons-material/Add"; // Eksik import
 import { useNavigate } from "react-router-dom";
 
-export default function ListingApps({applications, loading}){
+export default function ListingApps({name,applications, loading}){
   const navigate = useNavigate();
   const handleView = (applicationNo) => {
     navigate(`/admin/edit-application/${applicationNo}`);
@@ -33,7 +33,7 @@ export default function ListingApps({applications, loading}){
         }}
       >
         <Typography variant="h5" component="div">
-          Başvuru Listesi
+          {name} Listesi
         </Typography>
         <Fab
           color="primary"
@@ -52,6 +52,7 @@ export default function ListingApps({applications, loading}){
               <TableCell>Başvuru ID</TableCell>
               <TableCell>Başvuru No</TableCell>
               <TableCell>Durum</TableCell>
+              <TableCell>Başvuran</TableCell>
               <TableCell>İşlemler</TableCell>
             </TableRow>
           </TableHead>
@@ -78,6 +79,8 @@ export default function ListingApps({applications, loading}){
                       <TableCell>{application.application_number}</TableCell>
                       {/* Durum Değişikliği */}
                       <TableCell>{application.status}</TableCell>
+
+                      <TableCell>{application.applicant_type}</TableCell>
 
                       {/* İşlemler */}
                       <TableCell>

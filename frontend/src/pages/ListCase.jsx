@@ -1,39 +1,50 @@
 import React from "react";
-import {
-  Box,
-  Typography,
-} from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import SearchBar from "../components/Searchbar";
 import useAPI from "../store/storeAPI";
 import ListingCase from "../components/ListingCase";
 
 export default function ListCase() {
+  const timeoutRef = React.useRef(null);
   const { fetchData } = useAPI();
   const [cases, setCases] = React.useState([]);
   const [loading, setLoading] = React.useState(false);
   const user = JSON.parse(sessionStorage.getItem("user"));
   const [searchQuery, setSearchQuery] = React.useState("");
 
-  React.useEffect(() => {
+  const getAllCase = async () => {
     var userRole = "";
-    if(user?.role === "Admin" || user?.role === "admin"){
-      userRole = "admin"
-    }else{
-      userRole = "lawyer"
+    if (user.role === "Admin" || user.role === "admin") {
+      userRole = "admin";
+    } else {
+      userRole = "lawyer";
     }
-    const getAllCase = async () => {
-      setLoading(true);
-      try {
-        const response = await fetchData(`/${userRole}/getallcases`, "GET");
-        setCases(response);
-      } catch (error) {
-        console.error(error);
-      } finally {
-        setLoading(false);
+    setLoading(true);
+    try {
+      const response = await fetchData(`/${userRole}/getallcases`, "GET");
+      if (response === 401) {
+        window.location.reload();
       }
-    };
+      setCases(response);
+      clearTimeout(timeoutRef.current);
+    } catch (error) {
+      window.location.reload();
+      console.error(error);
+    } finally {
+      clearTimeout(timeoutRef.current);
+      setLoading(false);
+    }
+  };
+
+  React.useState(() => {
+    timeoutRef.current = setTimeout(() => {
+      window.location.reload(); // 10 saniye sonunda sayfayı yenile
+    }, 10000);
     getAllCase();
-  }, []);
+    return () => {
+      clearTimeout(timeoutRef.current);
+    };
+  });
 
   // Filtrelenmiş veriler
   const filteredCases = cases.filter((caseItem) =>

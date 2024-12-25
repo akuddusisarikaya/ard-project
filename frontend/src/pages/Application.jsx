@@ -178,6 +178,7 @@ export default function Application() {
     }finally{
       updateData("docs", "");
       updateData("links", "");
+      navigate(0);
     }
     navigate(0);
   };

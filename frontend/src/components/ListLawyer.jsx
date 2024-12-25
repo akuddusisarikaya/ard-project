@@ -15,26 +15,40 @@ import { useNavigate } from "react-router-dom";
 import storeAPI from "../store/storeAPI";
 import SearchBar from "./Searchbar";
 export default function ListLawyer() {
+  const timeoutRef = React.useRef(null)
   const [lawyers, setLawyers] = React.useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const { fetchData } = storeAPI();
   const [loading, setLoading] = React.useState(false);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const fetchAllLawyers = async () => {
-      setLoading(true);
-      try {
-        const response = await fetchData("/admin/getalllawyers", "GET");
-        setLawyers(response);
-      } catch (error) {
-        console.error("Error fetching lawyers:", error);
-      } finally {
-        setLoading(false);
+  const fetchAllLawyers = async () => {
+    setLoading(true);
+    try {
+      const response = await fetchData("/admin/getalllawyers", "GET");
+      if(response === 401) {
+        window.location.reload()
       }
-    };
-    fetchAllLawyers();
-  }, [fetchData]);
+      clearTimeout(timeoutRef.current);
+      setLawyers(response);
+    } catch (error) {
+      window.location.reload();
+      console.error("Error fetching lawyers:", error);
+    } finally {
+      setLoading(false);
+      clearTimeout(timeoutRef.current);
+    }
+  };
+
+    React.useState(() => {
+      timeoutRef.current = setTimeout(() => {
+        window.location.reload(); // 10 saniye sonunda sayfayı yenile
+      }, 3000);
+      fetchAllLawyers();
+      return () => {
+        clearTimeout(timeoutRef.current);
+      };
+    });
 
   // Lawyer detaylarına gitme
   const handleView = (lawyerName) => {

@@ -14,26 +14,39 @@ import SearchBar from "./Searchbar";
 import storeAPI from "../store/storeAPI";
 
 export default function ListAdmin() {
+  const timeoutRef = React.useRef(null);
   const [admins, setAdmins] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const { fetchData } = storeAPI();
   const [loading, setLoading] = React.useState(false);
 
-  useEffect(() => {
-    const fetchAllAdmins = async () => {
-      setLoading(true);
-      try {
-        const response = await fetchData("/admin/getalladmins", "GET");
-        setAdmins(response);
-      } catch (error) {
-        console.error("Yönetici listesi alınırken hata oluştu:", error);
-      } finally {
-        setLoading(false);
+  const fetchAllAdmins = async () => {
+    setLoading(true);
+    try {
+      const response = await fetchData("/admin/getalladmins", "GET");
+      if (response === 401) {
+        window.location.reload();
       }
-    };
+      setAdmins(response);
+      clearTimeout(timeoutRef.current);
+    } catch (error) {
+      window.location.reload();
+      console.error("Yönetici listesi alınırken hata oluştu:", error);
+    } finally {
+      setLoading(false);
+      clearTimeout(timeoutRef.current);
+    }
+  };
 
+  React.useState(() => {
+    timeoutRef.current = setTimeout(() => {
+      window.location.reload(); // 10 saniye sonunda sayfayı yenile
+    }, 3000);
     fetchAllAdmins();
-  }, [fetchData]);
+    return () => {
+      clearTimeout(timeoutRef.current);
+    };
+  });
 
   // Yönetici listesi filtreleme
   const filteredAdmins = (admins || []).filter((user) =>

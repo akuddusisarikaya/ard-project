@@ -29,7 +29,7 @@ export default function ListApplication() {
   React.useState(() => {
     timeoutRef.current = setTimeout(() => {
       window.location.reload(); // 10 saniye sonunda sayfayı yenile
-    }, 10000);
+    }, 5000);
 
     fetchAllApplications();
     return () => {

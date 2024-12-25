@@ -39,7 +39,7 @@ export default function ListCase() {
   React.useState(() => {
     timeoutRef.current = setTimeout(() => {
       window.location.reload(); // 10 saniye sonunda sayfayı yenile
-    }, 10000);
+    }, 5000);
     getAllCase();
     return () => {
       clearTimeout(timeoutRef.current);

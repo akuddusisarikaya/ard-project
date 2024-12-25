@@ -40,8 +40,10 @@ const LawyerCases = () => {
       const filteredCases = responses.filter(
         (item) => item.case_continue === activate
       );
+      clearTimeout(timeoutRef.current);
       setCases(filteredCases);
     } catch (error) {
+      window.location.reload();
       console.error(error);
     } finally {
       setLoading(false);

@@ -8,6 +8,7 @@ import useAPI from "../store/storeAPI";
 import ListingCase from "../components/ListingCase";
 
 const LawyerCases = () => {
+  const timeoutRef = React.useRef(null);
   const { fetchData } = useAPI();
   const navigate = useNavigate();
   const [activate, setActivate] = React.useState(true);
@@ -23,29 +24,40 @@ const LawyerCases = () => {
     navigate("/");
   };
 
-  React.useEffect(() => {
-    const fetchCases = async () => {
-      if(caseList.length === 0){
-        return
+  const fetchCases = async () => {
+    if (caseList.length === 0) {
+      window.location.reload();
+      return;
+    }
+    setLoading(true);
+    try {
+      const responses = await Promise.all(
+        caseList.map((item) => fetchData(`/lawyer/getcasebyid/${item}`, "GET"))
+      );
+      if (responses === 401) {
+        return;
       }
-      setLoading(true);
-      try {
-        const responses = await Promise.all(
-          caseList.map((item) =>
-            fetchData(`/lawyer/getcasebyid/${item}`, "GET")
-          )
-        );
-        const filteredCases = responses.filter((item)=> item.case_continue === activate);
-        setCases(filteredCases);
-      } catch (error) {
-        console.error(error);
-      } finally {
-        setLoading(false);
-      }
-    };
+      const filteredCases = responses.filter(
+        (item) => item.case_continue === activate
+      );
+      setCases(filteredCases);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+      clearTimeout(timeoutRef.current);
+    }
+  };
+  React.useState(() => {
+    timeoutRef.current = setTimeout(() => {
+      window.location.reload(); // 10 saniye sonunda sayfayı yenile
+    }, 3000);
     fetchCases();
-  }, [activate]);
-  
+    return () => {
+      clearTimeout(timeoutRef.current);
+    };
+  });
+
   return (
     <Box sx={{ p: 2, mt: 2, textAlign: "center" }}>
       <Button

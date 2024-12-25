@@ -221,13 +221,17 @@ const EditCase = () => {
             {courtModal ? "Mahkemeleri Kapat" : "Mahkemeleri Görüntüle"}
           </Button>
           {courtModal ? <ShowCourts courtList={caseInfo.courts} /> : <></>}
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={handleCourtModalOpen}
-          >
-            Mahkeme Ekle
-          </Button>
+          {courtModal ? (
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={handleCourtModalOpen}
+            >
+              Mahkeme Ekle
+            </Button>
+          ) : (
+            <></>
+          )}
           <Button onClick={handleDocModal} variant="contained" color="primary">
             {docModal ? "Dokümanları Kapat" : "Dokümanları Görüntüle"}
           </Button>

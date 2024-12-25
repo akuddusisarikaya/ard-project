@@ -173,15 +173,13 @@ export default function Application() {
         return error;
       }
       alert("Başvuru oluşturuldu");
-      navigate(0);
     } catch (error) {
       return error;
     }finally{
       updateData("docs", "");
       updateData("links", "");
     }
-    // Navigate or submit logic here
-    //navigate("/success");
+    navigate(0);
   };
 
   return (

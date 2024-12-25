@@ -1,8 +1,10 @@
 import React from "react";
 import ListingApps from "../components/ListingApps";
 import storeAPI from "../store/storeAPI";
+import { useNavigate } from "react-router-dom";
 
 export default function ListApplication() {
+  const navigate = useNavigate();
   // Başvuru verileri
   const [applications, setApplications] = React.useState([]);
   const { fetchData } = storeAPI();
@@ -12,6 +14,9 @@ export default function ListApplication() {
       setLoading(true);
       try {
         const response = await fetchData("/admin/getcasebleapplications", "GET");
+        if(response === 401) {
+          navigate(0)
+        }
         setApplications(response);
       } catch (error) {
         return error;

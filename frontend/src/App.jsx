@@ -14,7 +14,7 @@ import LawyerCases from "./pages/LawyerCases";
 import LoginPage from "./pages/Login";
 import AppForOther from "./pages/AppForOther";
 import EditLawyer from "./pages/EditLawyer";
-//import Navbar from "./components/Navbar";
+import HomePage from "./pages/HomePage";
 
 function App() {
   return (
@@ -24,7 +24,10 @@ function App() {
       <Router>
         <Routes>
           {/* Login Sayfası */}
-          <Route path="/" element={<LoginPage />} />
+
+          <Route path = "/" element= {<HomePage/>}/>
+
+          <Route path="/login" element={<LoginPage />} />
 
           <Route path="/application" element={<AppForOther />} />
 
@@ -46,7 +49,7 @@ function App() {
             <Route path="edit-case/:caseNo" element={<EditCase />} />
           </Route>
           {/* Varsayılan Rota */}
-          <Route path="*" element={<LoginPage />} />
+          {/*<Route path="*" element={<LoginPage />} />*/}
         </Routes>
       </Router>
     </DataProvider>

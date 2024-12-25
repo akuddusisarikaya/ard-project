@@ -40,9 +40,9 @@ export default function EditApplication() {
 
     try {
       const appID = id;
-      const response = await setData(
-        `/denemepatchapp/${appID}`,
-        "PATCH",
+      await setData(
+        `/admin/updateapplication/${appID}`,
+        "PUT",
         updatedFormState
       );
       navigate(-1);

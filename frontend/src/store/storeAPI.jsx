@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const API = import.meta.env.VITE_API_LINK;
 const token = JSON.parse(sessionStorage.getItem("token"));
@@ -16,9 +17,12 @@ const useAPI = create((set) => ({
         method: `${order}`,
         headers: {
           "Content-Type": "application/json",
-          Authorization : `Bearer ${token}`, 
+          Authorization: `Bearer ${token}`,
         },
       });
+      if (response.status === 401) {
+        return 401;
+      }
       if (!response.ok) {
         set({ error: "Data did not fetch", loading: false });
         return;
@@ -68,7 +72,7 @@ const useAPI = create((set) => ({
       });
       const data = response.data;
       set({ loading: false });
-      return data
+      return data;
     } catch (error) {
       set({ error: error.message, loading: false });
     } finally {

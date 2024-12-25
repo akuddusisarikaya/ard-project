@@ -44,21 +44,21 @@ export default function ListingCase({cases, loading}) {
           ) : (
             <TableBody>
               {cases.map((caseItem) => (
-                <TableRow key={caseItem._id}>
+                <TableRow key={caseItem?._id}>
                   {/* Case No */}
-                  <TableCell>{caseItem.case_number}</TableCell>
-                  <TableCell>{caseItem.case_start_date}</TableCell>
+                  <TableCell>{caseItem?.case_number}</TableCell>
+                  <TableCell>{caseItem?.case_start_date}</TableCell>
                   <TableCell>
-                    {caseItem.case_continue ? "Devam Ediyor" : "Sonlandı"}
+                    {caseItem?.case_continue ? "Devam Ediyor" : "Sonlandı"}
                   </TableCell>
-                  <TableCell>{caseItem.case_end_date}</TableCell>
+                  <TableCell>{caseItem?.case_end_date}</TableCell>
                   {/* İşlemler */}
                   <TableCell>
                     <Button
                       variant="contained"
                       color="primary"
                       sx={{ mr: 1 }}
-                      onClick={() => handleEdit(caseItem._id)}
+                      onClick={() => handleEdit(caseItem?._id)}
                     >
                       Düzenle
                     </Button>

@@ -1,6 +1,6 @@
 import express  from "express";
 import { verifyAdminToken, verifyUserToken} from "../middleware/verifyToken";
-import {addToUser, createUser, getAllUsers, getAllAdmins, getAllLawyers, getUserByID, deleteUser, updateUser, patchUser} from "../controller/user";
+import {addToUser, createUser, getAllUsers, getAllAdmins, getAllLawyers, getUserByID, deleteUser, updateUser, patchUser, changePassword} from "../controller/user";
 
 const router = express.Router();
 
@@ -18,6 +18,7 @@ router.put('/admin/updateuser/:id', verifyAdminToken, updateUser);
 router.put('/lawyer/updateuser/:id', verifyUserToken,updateUser);
 router.patch('/admin/patchuser/:id', verifyAdminToken, patchUser );
 router.patch('/lawyer/patchuser/:id', verifyUserToken, patchUser);
-router.patch('/admin/addToLawyerbyid/:id',verifyAdminToken, addToUser)
+router.patch('/admin/addToLawyerbyid/:id',verifyAdminToken, addToUser);
+router.patch('/admin/changePassword/:id', verifyAdminToken,changePassword);
 
 export default router

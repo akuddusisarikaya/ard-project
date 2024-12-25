@@ -96,14 +96,7 @@ export default function ListLawyer() {
               {filteredLawyers.map((lawyer) => (
                 <TableRow key={lawyer._id}>
                   {/* Lawyer Name */}
-                  <TableCell
-                    sx={{
-                      cursor: "pointer",
-                      color: "blue",
-                      textDecoration: "underline",
-                    }}
-                    onClick={() => handleView(lawyer.name)}
-                  >
+                  <TableCell>
                     {lawyer.name}
                   </TableCell>
 

@@ -6,10 +6,10 @@ export const createUser = async (
   req: Request,
   res: Response
 ): Promise<void> => {
-  const {name, user_name,password, role  } = req.body;
+  const { name, user_name, password, role } = req.body;
   try {
-    const hashedPassword= await bcryptjs.hash(password, 10);
-    const data = new User({name, user_name, role, password : hashedPassword});
+    const hashedPassword = await bcryptjs.hash(password, 10);
+    const data = new User({ name, user_name, role, password: hashedPassword });
     const newUser = data.save();
     res.status(201).json(newUser);
   } catch (error) {
@@ -88,7 +88,9 @@ export const updateUser = async (
   const { id } = req.params;
   const newData = req.body;
   try {
-    const updatedUser = User.findByIdAndUpdate(id, newData, { new: true });
+    const updatedUser = await User.findByIdAndUpdate(id, newData, {
+      new: true,
+    });
     res.status(200).json(updatedUser);
   } catch (error) {
     res.status(500).json({ message: "Kullanıcı güncellenmedi", error });
@@ -99,7 +101,7 @@ export const patchUser = async (req: Request, res: Response): Promise<void> => {
   const { id } = req.params;
   const newData = req.body;
   try {
-    const updatedUser = User.findByIdAndUpdate(id, newData);
+    const updatedUser = await User.findByIdAndUpdate(id, newData);
     res.status(200).json(updatedUser);
   } catch (error) {
     res.status(500).json({ message: "Kullanıcı güncellenmedi", error });
@@ -108,26 +110,68 @@ export const patchUser = async (req: Request, res: Response): Promise<void> => {
 
 export const addToUser = async (req: Request, res: Response): Promise<void> => {
   try {
-    const {id} = req.params;
-    const {newCase} = req.body;
+    const { id } = req.params;
+    const { newCase } = req.body;
 
-  if(!newCase) {
-    res.status(400).json({message: "veri bulunamadı"});
-  }
+    if (!newCase) {
+      res.status(400).json({ message: "veri bulunamadı" });
+    }
 
-  const updatedLawyer = await User.findByIdAndUpdate(
-    id,
-    { $addToSet : {cases :newCase}},
-    {new : true, runValidators: true}
-  )
+    const updatedLawyer = await User.findByIdAndUpdate(
+      id,
+      { $addToSet: { cases: newCase } },
+      { new: true, runValidators: true }
+    );
 
-  if(!updatedLawyer){
-    res.status(404).json({ message: 'Avukat bulunamadı' });
-  }
-  res.status(200).json(updatedLawyer);
+    if (!updatedLawyer) {
+      res.status(404).json({ message: "Avukat bulunamadı" });
+    }
+    res.status(200).json(updatedLawyer);
   } catch (error) {
-    res.status(500).json({ message: 'Internal Server Error', error });
+    res.status(500).json({ message: "Internal Server Error", error });
   }
+};
 
-
-}
+export const changePassword = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  try {
+    const { id } = req.params;
+    const { old_password, new_password } = req.body;
+    if (!id) {
+      res.status(404).json({ message: "ID verisi bulunamadı" });
+      return;
+    }
+    if (!old_password) {
+      res.status(400).json({ message: "Eski parola girilmedi" });
+      return;
+    }
+    if (!new_password) {
+      res.status(400).json({ message: "Yeni parola girilmedi" });
+      return;
+    }
+    const user = await User.findById(id);
+    if (!user) {
+      res.status(404).json({ error: "Kullanıcı bulunamadı" });
+      return;
+    }
+    const isPasswordValid = await bcryptjs.compare(old_password, user.password);
+    if (!isPasswordValid) {
+      res.status(400).json({ message: "Şifre yanlış" });
+      return;
+    }
+    const hashedPassword = await bcryptjs.hash(new_password, 10);
+    const newUser = await User.findByIdAndUpdate(id, {
+      password: hashedPassword,
+    });
+    res
+      .status(200)
+      .json({ message: "Kullanıcı parolası güncellendi", newUser });
+    return;
+  } catch (error) {
+    res
+      .status(500)
+      .json({ massage: "Kullanıcı parolası güncellenemedi", error });
+  }
+};

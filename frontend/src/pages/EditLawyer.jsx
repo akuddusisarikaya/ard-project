@@ -113,7 +113,7 @@ export default function EditLawyer() {
       console.error(error);
     } finally {
       setLoading(false);
-      window.location.reload();
+      window.history.back();
     }
   };
   const handleChangePassword = async () => {

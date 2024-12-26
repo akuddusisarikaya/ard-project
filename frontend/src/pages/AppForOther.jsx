@@ -167,7 +167,9 @@ export default function AppForOther() {
     } finally {
       updateData("docs", "");
       updateData("links", "");
+      window.location.reload();
     }
+    window.location.reload();
   };
 
   return (
@@ -239,7 +241,7 @@ export default function AppForOther() {
         onChange={(e) => handleChange("applicant_address", e.target.value)}
       />
 
-      <FormGroup style={{marginLeft : "15%"}}>
+      <FormGroup style={{ marginLeft: "15%" }}>
         <br></br>
         <FormControlLabel
           control={
